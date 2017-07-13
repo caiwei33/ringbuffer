@@ -27,7 +27,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
         ringbuffer_write(&rb,&Tx[0]);
 
-        printf("写入第:%d次,\n",j);
+        printf("写入第:%d次,余下空位置 %d,\n",j,rb.Txlen);
     }
 
 
@@ -44,7 +44,7 @@ int _tmain(int argc, _TCHAR* argv[])
         }
 
         printf("\n");
-        printf("读出第:%d次,\n",i);
+        printf("读出第:%d次,余下空位置:%d,\n",i,rb.Rxlen);
         
     }
 
