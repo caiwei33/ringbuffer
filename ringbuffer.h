@@ -21,6 +21,7 @@
 
 typedef unsigned char uint8_t;
 
+#define __DEBUG__
 
 #ifdef      __cplusplus
 extern "C"{
