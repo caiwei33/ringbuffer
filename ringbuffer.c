@@ -24,9 +24,9 @@ uint8_t ringbufferArray[RINGBUFFER_SIZE][SINGLE_BUFFER];    /* 缓冲数组 */
  /*
 *********************************************************************************************************
 *	函 数 名: ringbuffer_next
-*	功能说明: 
-*	形    参：无
-*	返 回 值: 
+*	功能说明: 计算存储元素位置
+*	形    参：addr 地址
+*	返 回 值: 存储地址
 *********************************************************************************************************
 */
 uint8_t ringbuffer_next(uint8_t addr)
@@ -36,23 +36,22 @@ uint8_t ringbuffer_next(uint8_t addr)
  
  /*
 *********************************************************************************************************
-*	函 数 名: ringbuffer_next
-*	功能说明: 
-*	形    参：无
-*	返 回 值: 
+*	函 数 名: ringbuffer_length
+*	功能说明: 计算余下空间长度
+*	形    参：rb 句柄
+*	返 回 值: 长度
 *********************************************************************************************************
 */
 uint8_t ringbuffer_length(ringbuffer *rb)
 {
     /* 初始化情况 */
-    
-    if(rb->start >= rb->end)
+    if(rb->start < rb->end)
     {
-        return (rb->start - rb->end) % rb->size;
+        return rb->size - ((rb->start - rb->end) % rb->size);
     }
     else
     {
-        return rb->end - rb->start;
+        return rb->size - (rb->start - rb->end);
     }
     
     
@@ -97,7 +96,7 @@ void ringbuffer_write(ringbuffer *rb , uint8_t *data)
     pos = ringbuffer_next(rb->start);
     rb->start++;
     
-    if(len >= 1)
+    if(len > 1)
     {
 #ifdef __DEBUG__
 
@@ -134,7 +133,7 @@ uint8_t *ringbuffer_read(ringbuffer *rb)
     pos = ringbuffer_next(rb->end);
     rb->end++;
 
-    if(len)
+    if(len <= RINGBUFFER_SIZE - 1)
     {
 
 #ifdef __DEBUG__
